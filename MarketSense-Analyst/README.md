@@ -1,48 +1,53 @@
 # 📈 MarketSense Analyst
-### Intelligent Market Monitoring & AI Insights via n8n
+### Autonomous AI Agent for Market Monitoring and Insight Generation
 
-**Workflow:** RSS Feed → AI Summarizer (Groq / Llama) → Gmail  
+**Workflow:** RSS Feed → AI Agent (Groq) → Gmail  
 
 ---
 
 ## 🧠 Overview
-MarketSense Analyst automates the process of monitoring market updates and generating concise investment insights — powered by **n8n** and **AI-driven analysis**.  
+MarketSense Analyst is an **AI-driven market analysis agent** built on **n8n**, designed to interpret daily financial news and generate actionable insights automatically.  
 
-The workflow periodically checks trusted financial RSS feeds (e.g., MarketWatch, Reuters, or Investing.com), then uses **Groq AI** to:
-1. Summarize key financial events and market movements.  
-2. Identify sentiment (positive / negative / neutral).  
-3. Craft a short, natural-language insight for quick decision-making.  
-4. Deliver the summary directly via **Gmail**, formatted in a clear daily briefing style.
+Unlike simple summarizers, this system uses an **AI Agent** that reasons over multiple headlines, detects underlying sentiment, and formulates concise, human-readable investment takeaways — all without manual review.  
 
-This system works quietly in the background, giving investors, analysts, or consultants quick context before market hours.
+The workflow periodically fetches the latest updates from trusted financial sources (e.g., MarketWatch, Reuters, Investing.com), processes them through the AI Agent, and sends a polished daily briefing via Gmail.
+
+---
+
+## ⚙️ Core Process
+1. **Fetch & Gather:** Pulls new financial news from selected RSS feeds.  
+2. **Reasoning & Analysis:** The AI Agent analyzes trends, sentiment, and relevance, connecting data across articles.  
+3. **Recommendation:** Based on its reasoning, it provides a brief strategic note (e.g., “Tech sector likely to recover; focus on semiconductors”).  
+4. **Delivery:** Generates a clean email summary and delivers it via Gmail.  
 
 ---
 
 ## ⚙️ Key Components
 | Node | Purpose |
 |------|----------|
-| **RSS Feed Trigger** | Fetches new financial headlines or articles periodically. |
-| **HTTP Request + Groq AI** | Summarizes and analyzes the market sentiment using natural language understanding. |
-| **HTML Formatter** | Builds a clean, responsive email layout. |
-| **Gmail Node** | Sends the final market summary email to the analyst or team. |
+| **RSS Feed Trigger** | Collects real-time market news and updates. |
+| **AI Agent (Groq Reasoning Engine)** | Performs multi-article analysis and generates structured insights. |
+| **HTML Formatter** | Builds a clean, minimal market summary email layout. |
+| **Gmail Node** | Sends the final report to the analyst or team. |
 
 ---
 
 ## 💡 Why It Matters
-- 📊 **Time-efficient:** Get a curated, human-like market summary without scrolling endless feeds.  
-- 🧠 **Contextual:** AI extracts not just facts, but *implications* behind the news.  
-- 🧩 **Adaptive:** Easily reconfigured for crypto, forex, or stock niches.  
+- 🧠 **Autonomous reasoning:** The agent understands context, not just keywords.  
+- 📊 **Action-ready:** Converts market chatter into clear, actionable perspectives.  
+- 🕒 **Low maintenance:** Operates quietly on schedule, no human supervision needed.  
 
-**Ideal for:** analysts, investment advisors, fintech product teams, or content strategists who rely on up-to-date market awareness.
+**Ideal for:** analysts, fintech startups, investment teams, and business strategists who value daily context without manual curation.
 
 ---
 
 ## 🧩 Example Output (Email)
 ```text
-📰 MarketSense Daily Brief — Oct 24, 2025
+📰 MarketSense Analyst — Daily Report (Oct 24, 2025)
 
-• S&P 500 gains 0.7% on renewed optimism around tech earnings.  
-• Oil prices stabilize after OPEC supply update.  
-• AI stocks show steady recovery amid increased investment flows.
+• Fed maintains rates; AI sector shows cautious optimism.  
+• Oil prices down 1.2% amid surplus projections.  
+• Tesla leads EV rebound as Q3 deliveries exceed forecast.
 
-🧠 Summary: Sentiment remains cautiously positive. Analysts highlight resilience in core sectors despite inflation pressure.
+🧠 AI Agent Summary:
+“Market sentiment remains moderately positive. Expect short-term tech recovery with resilient energy sector performance.”

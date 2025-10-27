@@ -41,13 +41,4 @@ The workflow runs on a predefined schedule (weekly or monthly), quietly reviewin
 
 ---
 
-## 🧩 Example Output (AI Agent Email)
-```text
-📊 SmartInvoice Auditor — Monthly Review (September 2025)
-
-• 4 overdue invoices (average delay: 6 days)  
-• 1 record flagged as inconsistent (amount mismatch)  
-• 28 transactions verified and balanced ✅  
-
-🧠 AI Agent Summary:
-"Overall cash flow remains stable. Notable improvement in on-time payments compared to August. Follow up with Client Delta for reconciliation."
+## 🧩 [Example Output (AI Agent Email)](./example_report_email.png)

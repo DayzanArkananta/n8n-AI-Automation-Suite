@@ -43,4 +43,56 @@ The workflow periodically fetches the latest updates from trusted financial sour
 
 ## 🧩 Example Output (Email)
 ```text
-<!doctype html>\n<html>\n<head>\n<meta charset="utf-8" />\n<meta name="viewport" content="width=device-width,initial-scale=1" />\n<title>Daily Stock Insight</title>\n<style>\n  body { font-family: "Segoe UI", Arial, sans-serif; background:#f9fafb; margin:0; padding:30px; color:#333; }\n  .container { max-width:700px; margin:0 auto; background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.05); padding:28px; }\n  h1 { font-size:20px; color:#0ea5e9; margin-bottom:8px; }\n  a { color:#2563eb; text-decoration:none; }\n  p { line-height:1.6; margin:8px 0; }\n  .section { margin-top:18px; padding-top:14px; border-top:1px solid #e5e7eb; }\n  .tag { display:inline-block; padding:4px 10px; border-radius:6px; background:#f0f9ff; color:#0369a1; font-size:12px; margin-top:4px; }\n  .recommendation { font-weight:600; font-size:15px; color:#111827; margin-top:6px; }\n  .footer { margin-top:24px; font-size:13px; color:#6b7280; border-top:1px solid #e5e7eb; padding-top:14px; text-align:center; }\n  .amount { background:#f0f9ff; padding:10px 14px; border-radius:8px; display:inline-block; font-weight:600; color:#0c4a6e; }\n</style>\n</head>\n<body>\n  <div class="container">\n    <h1>📈 Stock futures rise over optimism for U.S.-China trade deal ahead of Trump-Xi meeting</h1>\n    <p><a href="https://www.marketwatch.com/story/u-s-china-say-trade-deal-groundwork-has-been-laid-ahead-of-trump-xi-meeting-9f1fbe34?mod=mw_rss_topstories">https://www.marketwatch.com/story/u-s-china-say-trade-deal-groundwork-has-been-laid-ahead-of-trump-xi-meeting-9f1fbe34?mod=mw_rss_topstories</a></p>\n\n    <div class="section">\n      <h3>📰 Summary</h3>\n      <p>U.S. stock futures rose on Sunday after senior negotiators from the United States and China said they have laid groundwork for a new trade agreement ahead of the upcoming Trump‑Xi summit. The optimism reflects progress on tariffs and market access, easing concerns of a prolonged trade war. Futures on the S&P 500 and Dow Jones ticked higher, while the Nasdaq also edged up. Investors see the potential deal as a catalyst for lower volatility and improved corporate earnings outlook, especially for export‑heavy sectors. The market is awaiting confirmation from the leaders’ meeting later this week.</p>\n    </div>\n\n    <div class="section">\n      <h3>💡 Analysis & Insight</h3>\n      <p>The prospect of a U.S.–China trade pact is likely to lift risk‑on assets across the board. Industrials, consumer discretionary and agriculture firms that rely on cross‑border supply chains could see earnings upgrades, while technology names may benefit from reduced geopolitical risk premiums. However, the market remains sensitive to any derailment; a stalled deal could trigger a rapid swing back to defensive positioning. Short‑term traders may capitalize on volatility around the summit, but long‑term investors should weigh sector exposure rather than single‑stock bets until concrete details emerge.</p>\n    </div>\n\n    <div class="section">\n      <h3>💬 Investment Recommendation</h3>\n      <p class="recommendation">Wait and Observe</p>\n      <p>While the optimism is encouraging, the actual terms of the agreement remain uncertain until the Trump‑Xi meeting. Maintaining a flexible stance allows investors to capture upside if the deal is confirmed, yet protects against downside if negotiations falter.</p>\n    </div>\n\n      <p>Date: <strong>Today</strong></p>\n      <p>Total: <span class="amount">USD 0.00</span></p>\n    </div>\n\n    <div class="footer">\n      Sent automatically by <strong>Stock Insight AI</strong> • 2025  \n      <br>Stay informed, stay profitable 🚀\n    </div>\n  </div>\n</body>\n</html>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Daily Stock Insight</title>
+<style>
+  body { font-family: "Segoe UI", Arial, sans-serif; background:#f9fafb; margin:0; padding:30px; color:#333; }
+  .container { max-width:700px; margin:0 auto; background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.05); padding:28px; }
+  h1 { font-size:20px; color:#0ea5e9; margin-bottom:8px; }
+  a { color:#2563eb; text-decoration:none; }
+  p { line-height:1.6; margin:8px 0; }
+  .section { margin-top:18px; padding-top:14px; border-top:1px solid #e5e7eb; }
+  .tag { display:inline-block; padding:4px 10px; border-radius:6px; background:#f0f9ff; color:#0369a1; font-size:12px; margin-top:4px; }
+  .recommendation { font-weight:600; font-size:15px; color:#111827; margin-top:6px; }
+  .footer { margin-top:24px; font-size:13px; color:#6b7280; border-top:1px solid #e5e7eb; padding-top:14px; text-align:center; }
+  .amount { background:#f0f9ff; padding:10px 14px; border-radius:8px; display:inline-block; font-weight:600; color:#0c4a6e; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>📈 {{ $json.title }}</h1>
+    <p><a href="{{ $json.link }}">{{ $json.link }}</a></p>
+
+    <div class="section">
+      <h3>📰 Summary</h3>
+      <p>{{ $json.summary || "A brief overview of today's market update or company insight." }}</p>
+    </div>
+
+    <div class="section">
+      <h3>💡 Analysis & Insight</h3>
+      <p>{{ $json.analysis || "Professional insight and interpretation of the latest financial data or market movement." }}</p>
+    </div>
+
+    <div class="section">
+      <h3>💬 Investment Recommendation</h3>
+      <p class="recommendation">{{ $json.recommendation || "Buy / Sell / Hold / Wait and Observe" }}</p>
+      <p>{{ $json.recommendation_reason || "Rationale behind this recommendation goes here." }}</p>
+    </div>
+
+    <div class="section" style="text-align:right;">
+      <p>Invoice No: <strong>{{ $json.invoice_number || "INV-{{ $json.date }}" }}</strong></p>
+      <p>Date: <strong>{{ $json.date || "Today" }}</strong></p>
+      <p>Total: <span class="amount">{{ $json.amount || "USD 0.00" }}</span></p>
+    </div>
+
+    <div class="footer">
+      Sent automatically by <strong>Stock Insight AI</strong> • {{ new Date().getFullYear() }}  
+      <br>Stay informed, stay profitable 🚀
+    </div>
+  </div>
+</body>
+</html>

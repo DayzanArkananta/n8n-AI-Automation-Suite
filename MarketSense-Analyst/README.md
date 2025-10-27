@@ -1,4 +1,4 @@
-[# 📈 MarketSense Analyst](./MarketSense Analyst.json)
+# 📈 [MarketSense Analyst](./MarketSense Analyst.json)
 ### Autonomous AI Agent for Market Monitoring and Insight Generation
 
 **Workflow:** RSS Feed → AI Agent (Groq) → Gmail  

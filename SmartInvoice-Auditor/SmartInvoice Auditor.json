@@ -1,0 +1,189 @@
+{
+  "name": "SmartInvoice Auditor",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "roundDate",
+        "date": "={{ $json.timestamp }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [224, 0],
+      "id": "DATE_PROCESSOR",
+      "name": "1 month before"
+    },
+    {
+      "parameters": {
+        "sendTo": "finance@company.com",
+        "subject": "={{ $fromAI('Subject', '', 'string') }}",
+        "message": "={{ $fromAI('Message', '', 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [752, 224],
+      "id": "SEND_EMAIL",
+      "name": "Send a Report in Gmail",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_GMAIL_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SPREADSHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Invoice Auditor Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/edit"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [592, 240],
+      "id": "GOOGLE_SHEET",
+      "name": "Invoice Auditor Data",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months",
+              "triggerAtHour": 12
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0],
+      "id": "SCHEDULE_TRIGGER",
+      "name": "1 Month Trigger"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze only invoices where the Issue Date or Due Date is between {{ $json.roundedDate }} and {{ $('1 Month Trigger').item.json.timestamp }}",
+        "options": {
+          "systemMessage": "You are SmartInvoice Auditor, an AI Financial Assistant designed to monitor invoices and payment behavior for a company.\n\n### 🎯 Your Objective\nEvery month you will:\n1. Analyze invoice data from Google Sheets titled **\"Invoice Auditor Data\"** between a given date range.\n2. Identify:\n   - Clients who frequently pay late.\n   - Invoices currently overdue (>7 days past due date).\n   - Anomalies in invoice amounts (e.g., unusually high or low compared to client’s previous records).\n3. Generate a **Monthly summary report** formatted in professional **HTML**.\n4. Send the report via email to the finance team.\n\n### 🧩 Available Tools\n- **Google Sheets Tool (Invoice Auditor Data)** — read invoice data.\n- **Email Tool (Gmail)** — send HTML report.\n\n### ✉️ Output Format\nSubject: SmartInvoice Monthly Report — [Start Date] to [End Date]\n\nHTML Email body includes:\n- Late Payment Overview (table)\n- Detected Anomalies (table)\n- Overall Insights (paragraph)\n- Footer note\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [512, 0],
+      "id": "AI_ANALYZER",
+      "name": "Invoice Analyzer"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-20b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [448, 224],
+      "id": "AI_MODEL",
+      "name": "OpenAi",
+      "credentials": {
+        "groqApi": {
+          "id": "YOUR_GROQ_CREDENTIAL_ID",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "1 month before": {
+      "main": [
+        [
+          {
+            "node": "Invoice Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a Report in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Invoice Analyzer",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Invoice Auditor Data": {
+      "ai_tool": [
+        [
+          {
+            "node": "Invoice Analyzer",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1 Month Trigger": {
+      "main": [
+        [
+          {
+            "node": "1 month before",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAi": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Invoice Analyzer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "PUBLIC_VERSION_1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "PUBLIC_INSTANCE_ID"
+  },
+  "id": "SmartInvoice_Public",
+  "tags": [
+    {
+      "id": "Portfolio",
+      "name": "Portfolio"
+    }
+  ]
+}

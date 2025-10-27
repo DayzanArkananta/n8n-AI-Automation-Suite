@@ -39,4 +39,4 @@ The result is a clean, automated intelligence layer for prioritizing opportuniti
 
 ---
 
-## 🧩 Example Output (Slack Notification)
+## 🧩 [Example Output (Slack Notification)](./example_output_sheet.png)

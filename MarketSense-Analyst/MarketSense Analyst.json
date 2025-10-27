@@ -1,0 +1,139 @@
+{
+  "name": "MarketSense Analyst",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {}
+          ]
+        },
+        "feedUrl": "https://feeds.marketwatch.com/marketwatch/topstories/"
+      },
+      "type": "n8n-nodes-base.rssFeedReadTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ce88c475-c6b9-47b5-bcc6-2d5c47e6196a",
+      "name": "RSS Marketwatch Feed Trigger"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Use the following data as the news source:\n\ntitle:  {{ $json.title }}\nLink: {{ $json.link }}\ncontent: {{ $json.content }}\ncontent snippet: {{ $json.contentSnippet }}",
+        "options": {
+          "systemMessage": "=You are an AI Financial Analyst specialized in interpreting stock market news, analyzing market trends, and offering professional investment insights.\n\nYour objective:\n1. Read the news data provided from the MarketWatch RSS Feed.\n2. Summarize the news in no more than 5 sentences — clear, concise, and focused on investment relevance.\n3. Provide a short professional analysis on how this news could influence the stock market, investor sentiment, or specific companies/sectors.\n4. Conclude with a practical investment recommendation using one of the following:\n   - \"Buy\"\n   - \"Sell\"\n   - \"Hold\"\n   - \"Wait and Observe\"\n   Each must include a short, logical reason.\n5. Maintain a professional yet approachable tone, as if writing a daily investment briefing email.\n\nFinal output format:\n==============================\n<!doctype html>\n<html>\n<head>\n<meta charset=\"utf-8\" />\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" />\n<title>Daily Stock Insight</title>\n<style>\n  body { font-family: \"Segoe UI\", Arial, sans-serif; background:#f9fafb; margin:0; padding:30px; color:#333; }\n  .container { max-width:700px; margin:0 auto; background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.05); padding:28px; }\n  h1 { font-size:20px; color:#0ea5e9; margin-bottom:8px; }\n  a { color:#2563eb; text-decoration:none; }\n  p { line-height:1.6; margin:8px 0; }\n  .section { margin-top:18px; padding-top:14px; border-top:1px solid #e5e7eb; }\n  .tag { display:inline-block; padding:4px 10px; border-radius:6px; background:#f0f9ff; color:#0369a1; font-size:12px; margin-top:4px; }\n  .recommendation { font-weight:600; font-size:15px; color:#111827; margin-top:6px; }\n  .footer { margin-top:24px; font-size:13px; color:#6b7280; border-top:1px solid #e5e7eb; padding-top:14px; text-align:center; }\n  .amount { background:#f0f9ff; padding:10px 14px; border-radius:8px; display:inline-block; font-weight:600; color:#0c4a6e; }\n</style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>📈 {{ $json.title }}</h1>\n    <p><a href=\"{{ $json.link }}\">{{ $json.link }}</a></p>\n\n    <div class=\"section\">\n      <h3>📰 Summary</h3>\n      <p>{{ $json.summary || \"A brief overview of today's market update or company insight.\" }}</p>\n    </div>\n\n    <div class=\"section\">\n      <h3>💡 Analysis & Insight</h3>\n      <p>{{ $json.analysis || \"Professional insight and interpretation of the latest financial data or market movement.\" }}</p>\n    </div>\n\n    <div class=\"section\">\n      <h3>💬 Investment Recommendation</h3>\n      <p class=\"recommendation\">{{ $json.recommendation || \"Buy / Sell / Hold / Wait and Observe\" }}</p>\n      <p>{{ $json.recommendation_reason || \"Rationale behind this recommendation goes here.\" }}</p>\n    </div>\n\n      <p>Date: <strong>{{ $json.date || \"Today\" }}</strong></p>\n      <p>Total: <span class=\"amount\">{{ $json.amount || \"USD 0.00\" }}</span></p>\n    </div>\n\n    <div class=\"footer\">\n      Sent automatically by <strong>Stock Insight AI</strong> • {{ new Date().getFullYear() }}  \n      <br>Stay informed, stay profitable 🚀\n    </div>\n  </div>\n</body>\n</html>\n\n\n==============================\n\nAfter generating the analysis, prepare it in a well-formatted email body so it can be sent automatically through Gmail.\nThe email should include:\n- Subject line: “Daily Stock Insight - {{ $json.title }}”\n- Body: The formatted content above.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "598560d7-b88d-4e82-a49d-ec9a316c1a7b",
+      "name": "Market Analyzer"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        176,
+        224
+      ],
+      "id": "80710a70-0b20-46da-b8bb-60cec654e620",
+      "name": "OpenAi",
+      "credentials": {
+        "groqApi": {
+          "id": "b1kfonJ4IlWU0WDR",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "dayzanazhararkananta@gmail.com",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        384,
+        208
+      ],
+      "id": "c323202f-9943-41d8-89fc-d073aec00fa8",
+      "name": "Send Notification in Gmail",
+      "webhookId": "03fccb8b-7786-48b4-b0a3-5b99acd30d55",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "jbtkxDohzLGulITF",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "RSS Marketwatch Feed Trigger": {
+      "main": [
+        [
+          {
+            "node": "Market Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAi": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Market Analyzer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Notification in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Market Analyzer",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3e6ad60c-8abe-44b0-b07f-d72f87395dbf",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "23c47cc9ac3ad5510374e82b5c1d148663b55cda376354053ed0e75028143fa4"
+  },
+  "id": "FvS0YdlokwMsWGs5",
+  "tags": [
+    {
+      "createdAt": "2025-10-24T09:41:21.540Z",
+      "updatedAt": "2025-10-24T09:41:21.540Z",
+      "id": "OfEkuGl2qkssuGD0",
+      "name": "Portfolio"
+    }
+  ]
+}

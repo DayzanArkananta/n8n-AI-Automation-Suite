@@ -10,7 +10,7 @@ Each workflow demonstrates a practical use case combining data automation, intel
 
 | Project | Description |
 |----------|--------------|
-| **MarketSense Analyst** | Automatically monitors stock market news from trusted financial sources (MarketWatch RSS). Uses AI to summarize, analyze, and send concise investment insights via Gmail. |
+| [**MarketSense Analyst**](./MarketSense-Analyst/README.md) | Automatically monitors stock market news from trusted financial sources (MarketWatch RSS). Uses AI to summarize, analyze, and send concise investment insights via Gmail. |
 | **DealTracker Pro** | An AI-assisted lead scoring and CRM enrichment system for real estate or investment companies. Scores leads, logs data into Google Sheets, and alerts your team instantly. |
 | **SmartInvoice Auditor** | A periodic AI-driven audit system that analyzes financial data in Google Sheets, detects overdue invoices or anomalies, and emails monthly HTML reports to finance teams. |
 

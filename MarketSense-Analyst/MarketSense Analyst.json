@@ -4,19 +4,14 @@
     {
       "parameters": {
         "pollTimes": {
-          "item": [
-            {}
-          ]
+          "item": [{}]
         },
         "feedUrl": "https://feeds.marketwatch.com/marketwatch/topstories/"
       },
       "type": "n8n-nodes-base.rssFeedReadTrigger",
       "typeVersion": 1,
-      "position": [
-        0,
-        0
-      ],
-      "id": "ce88c475-c6b9-47b5-bcc6-2d5c47e6196a",
+      "position": [0, 0],
+      "id": "RSS_TRIGGER",
       "name": "RSS Marketwatch Feed Trigger"
     },
     {
@@ -29,11 +24,8 @@
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.2,
-      "position": [
-        208,
-        0
-      ],
-      "id": "598560d7-b88d-4e82-a49d-ec9a316c1a7b",
+      "position": [208, 0],
+      "id": "MARKET_ANALYZER",
       "name": "Market Analyzer"
     },
     {
@@ -43,46 +35,38 @@
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
-      "position": [
-        176,
-        224
-      ],
-      "id": "80710a70-0b20-46da-b8bb-60cec654e620",
+      "position": [176, 224],
+      "id": "OPENAI_MODEL",
       "name": "OpenAi",
       "credentials": {
         "groqApi": {
-          "id": "b1kfonJ4IlWU0WDR",
+          "id": "YOUR_GROQ_CREDENTIAL_ID",
           "name": "Groq account"
         }
       }
     },
     {
       "parameters": {
-        "sendTo": "dayzanazhararkananta@gmail.com",
-        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
-        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "sendTo": "user@example.com",
+        "subject": "={{ $fromAI('Subject', '', 'string') }}",
+        "message": "={{ $fromAI('Message', '', 'string') }}",
         "options": {
           "appendAttribution": false
         }
       },
       "type": "n8n-nodes-base.gmailTool",
       "typeVersion": 2.1,
-      "position": [
-        384,
-        208
-      ],
-      "id": "c323202f-9943-41d8-89fc-d073aec00fa8",
+      "position": [384, 208],
+      "id": "SEND_GMAIL",
       "name": "Send Notification in Gmail",
-      "webhookId": "03fccb8b-7786-48b4-b0a3-5b99acd30d55",
       "credentials": {
         "gmailOAuth2": {
-          "id": "jbtkxDohzLGulITF",
+          "id": "YOUR_GMAIL_CREDENTIAL_ID",
           "name": "Gmail account"
         }
       }
     }
   ],
-  "pinData": {},
   "connections": {
     "RSS Marketwatch Feed Trigger": {
       "main": [
@@ -122,17 +106,15 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "3e6ad60c-8abe-44b0-b07f-d72f87395dbf",
+  "versionId": "PUBLIC_VERSION_1",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "23c47cc9ac3ad5510374e82b5c1d148663b55cda376354053ed0e75028143fa4"
+    "instanceId": "PUBLIC_INSTANCE_ID"
   },
-  "id": "FvS0YdlokwMsWGs5",
+  "id": "MarketSense_Public",
   "tags": [
     {
-      "createdAt": "2025-10-24T09:41:21.540Z",
-      "updatedAt": "2025-10-24T09:41:21.540Z",
-      "id": "OfEkuGl2qkssuGD0",
+      "id": "Portfolio",
       "name": "Portfolio"
     }
   ]

@@ -1,0 +1,206 @@
+{
+  "name": "DealTracker Pro",
+  "nodes": [
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"lead_score\": \"Hot Lead / Moderate Lead / Cold Lead\",\n  \"reason\": \"Explain in one sentence why this classification was chosen.\",\n  \"suggested_action\": \"Give a concise action recommendation (e.g. schedule call, send ROI data, add to nurture list).\"\n}\n",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [528, 160],
+      "id": "OUTPUT_PARSER",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "formTitle": "Find Your Next Investment-Grade Property",
+        "formDescription": "Tell us what kind of property you're looking for, and our AI-powered system will match you with the best investment opportunities — faster than any agent can.\n\n💡 Get personalized property insights and deal recommendations instantly.",
+        "formFields": {
+          "values": [
+            { "fieldLabel": "What’s your full name?", "requiredField": true },
+            { "fieldLabel": "What’s the best email to reach you?", "fieldType": "email", "requiredField": true },
+            { "fieldLabel": "Would you like to leave a phone number for faster communication?", "requiredField": true },
+            { "fieldLabel": "Which area or city are you interested in?", "requiredField": true },
+            {
+              "fieldLabel": "What’s your estimated budget (in USD)?",
+              "fieldType": "number",
+              "placeholder": "Only Number (ex: 500000)",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "What type of property are you looking for?",
+              "fieldType": "checkbox",
+              "fieldOptions": {
+                "values": [
+                  { "option": "Luxury Villa" },
+                  { "option": "Apartment / Condo" },
+                  { "option": "Land Plot" },
+                  { "option": "Commercial Property" }
+                ]
+              },
+              "limitSelection": "exact",
+              "requiredField": true
+            },
+            { "fieldLabel": "What’s your main goal for this investment?", "fieldType": "textarea", "requiredField": true },
+            { "fieldLabel": "When would you prefer a short discovery call with our property expert?", "requiredField": true },
+            { "fieldLabel": "Anything else you’d like us to know?", "fieldType": "textarea" }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [176, 0],
+      "id": "FORM_TRIGGER",
+      "name": "Real Estate & Investment Submission"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Full Name: {{ $json['What’s your full name?'] }}\nEmail: {{ $json['What’s the best email to reach you?'] }}\nPhone: {{ $json['Would you like to leave a phone number for faster communication?'] }}\nLocation: {{ $json['Which area or city are you interested in?'] }}\nBudget (USD): {{ $json['What’s your estimated budget (in USD)?'] }}\nProperty Type: {{ $json['What type of property are you looking for?'][0] }}\nInvestment Goal: {{ $json['What’s your main goal for this investment?'] }}\nPreferred Time: {{ $json['When would you prefer a short discovery call with our property expert?'] }}\nNotes: {{ $json['Anything else you’d like us to know?'] }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are an AI Lead Scoring Assistant for a luxury real estate and investment company called DealTracker Pro. Analyze incoming lead data and classify the lead into: Hot Lead / Moderate Lead / Cold Lead, based on budget, location, and motivation."
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [448, 0],
+      "id": "AI_ANALYZER",
+      "name": "Deal Analyzer"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant"
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [400, 224],
+      "id": "AI_MODEL_1",
+      "name": "Llama",
+      "credentials": {
+        "groqApi": {
+          "id": "YOUR_GROQ_CREDENTIAL_ID",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile"
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [528, 352],
+      "id": "AI_MODEL_2",
+      "name": "Llama 2",
+      "credentials": {
+        "groqApi": {
+          "id": "YOUR_GROQ_CREDENTIAL_ID",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SPREADSHEET_ID",
+          "cachedResultName": "DealTracker CRM Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/edit"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/edit#gid=0"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [816, 80],
+      "id": "CRM_SHEET",
+      "name": "Input CRM Data",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "text": "=🔥 New Lead Analyzed — DealTracker Pro\n👤 Name: {{ $('Real Estate & Investment Submission').item.json['What’s your full name?'] }}\n📧 Email: {{ $('Real Estate & Investment Submission').item.json['What’s the best email to reach you?'] }}\n📍 Location: {{ $('Real Estate & Investment Submission').item.json['Which area or city are you interested in?'] }}\n🏗️ Property Type: {{ $('Real Estate & Investment Submission').item.json['What type of property are you looking for?'][0] }}\n💰 Budget: ${{ $('Real Estate & Investment Submission').item.json['What’s your estimated budget (in USD)?'] }}\n🧠 Lead Score: {{ $json.output.lead_score }}\n💡 Reason: {{ $json.output.reason }}\n📅 Suggested Action: {{ $json.output.suggested_action }}\n🕒 *Received On:* {{ $now }}\n---\n⚙️ _“Never lose another million-dollar lead — your CRM thinks before you do.”_"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [816, -80],
+      "id": "TELEGRAM_NOTIFICATION",
+      "name": "Send a Text Notification",
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_TELEGRAM_CREDENTIAL_ID",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Deal Analyzer",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Real Estate & Investment Submission": {
+      "main": [
+        [
+          {
+            "node": "Deal Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deal Analyzer": {
+      "main": [
+        [
+          { "node": "Input CRM Data", "type": "main", "index": 0 },
+          { "node": "Send a Text Notification", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Llama": {
+      "ai_languageModel": [
+        [
+          { "node": "Deal Analyzer", "type": "ai_languageModel", "index": 0 }
+        ]
+      ]
+    },
+    "Llama 2": {
+      "ai_languageModel": [
+        [
+          { "node": "Structured Output Parser", "type": "ai_languageModel", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "versionId": "PUBLIC_VERSION_1",
+  "meta": { "templateCredsSetupCompleted": true, "instanceId": "PUBLIC_INSTANCE_ID" },
+  "id": "DealTracker_Public",
+  "tags": [{ "id": "Portfolio", "name": "Portfolio" }]
+}

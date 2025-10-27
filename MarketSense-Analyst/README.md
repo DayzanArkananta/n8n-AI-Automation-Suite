@@ -41,4 +41,4 @@ The workflow periodically fetches the latest updates from trusted financial sour
 
 ---
 
-🧩 [Example Output (Email)](./example_output_email.png)
+## 🧩 [Example Output (Email)](./example_output_email.png)
